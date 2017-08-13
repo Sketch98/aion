@@ -33,7 +33,9 @@ def _add_vhd_port(ports_dict, line):
             return
         port_width_match = port_width.search(line)
         if port_width_match is not None:
-            ports_dict[port] = [i for i in range(int(port_width_match.group(2)), int(port_width_match.group(1))+1)]
+            ports_dict[port] =\
+                [i for i in range(int(port_width_match.group(2)),
+                                  int(port_width_match.group(1))+1)]
             return
     raise PortDeclarationError('Port declaration incorrect\n{}'.format(line))
 
@@ -67,8 +69,9 @@ timespec = re.compile(
 
 
 def _check_ucf_port(ports_dict, std_logic_found, line, new_ucf):
-    """Checks if line is a NET that matches with the ports in ports_dict. If line is a TIMESPEC it checks
-    std_logic_found to see if there is a std_logic port with the same port name."""
+    """Checks if line is a NET that matches with the ports in ports_dict. If
+    line is a TIMESPEC it checks std_logic_found to see if there is a
+    std_logic port with the same port name. """
     net_match = net.match(line)
     if net_match is not None:
         port = net_match.group(1)
@@ -81,7 +84,8 @@ def _check_ucf_port(ports_dict, std_logic_found, line, new_ucf):
             # mangled ports will have the true port name at the end
             for key in ports_dict:
                 if key.endswith(port):
-                    logging.info('Ucf port {} matched with vhd port {}'.format(port, key))
+                    logging.info('Ucf port {} matched with vhd port {}'
+                                 .format(port, key))
                     _add_ucf_port(key, port_num, ports_dict, std_logic_found)
                     new_ucf.write(line.replace(port, key))
                     break
@@ -118,6 +122,18 @@ def _get_vhd_ports(vhd_file):
     return ports_dict
 
 
+def _combine_file_names(*args):
+    def grab_name(file):
+        start = file.rfind('/')
+        end = file.find('.')
+        return file[start+1:end]
+    pass
+    
+    new_file_name = '_'.join(list(map(grab_name, args)))
+    new_file_name += args[-1][args[-1].find('.'):]
+    return new_file_name
+
+
 def ucf_gen(vhd_file, master_ucf_file, destination_dir=None):
     """Reads the vhd file's entity declaration and builds a new ucf file by
     pulling lines from the master ucf file. """
@@ -125,18 +141,11 @@ def ucf_gen(vhd_file, master_ucf_file, destination_dir=None):
         destination_dir = '/'.join([os.path.dirname(__file__), 'master_ucfs'])
     master_ucf_file = '/'.join([destination_dir, master_ucf_file])
 
-    ports_dict = _get_vhd_ports(vhd_file)
-
-    # The new ucf file's name is just a concatenation of the vhd file's name
-    # and the master ucf file's name.
-    vhd_start = vhd_file.rfind('/')
-    ucf_start = master_ucf_file.rfind('/')
-    new_ucf_file = ''.join([vhd_file[vhd_start+1:-4], '_',
-                            master_ucf_file[ucf_start+1:]])
-    
     # all std_logic ports found could be clocks with associated timespecs
     std_logic_found = []
-
+    ports_dict = _get_vhd_ports(vhd_file)
+    new_ucf_file = _combine_file_names(vhd_file, master_ucf_file)
+    
     # Iterate through ucf file to find items in port list.
     # Lines with ports in the port list get added to the new ucf file.
     with open(new_ucf_file, 'w') as new_ucf:

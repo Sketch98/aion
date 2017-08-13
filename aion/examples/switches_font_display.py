@@ -19,7 +19,7 @@ def switches_font_display(clk, vga_ports, resolution, frequency, font_size):
     
     ram_write_port = RamPort(ram_depth, 7)
     font_ctrl = font_controller(clk, vga_ports, ram_write_port, resolution,
-                                frequency, font_size, 128)
+                                frequency, font_size)
     
     write_clk = Signal(bool(0))
     div = clk_div(5e3, clk, write_clk)

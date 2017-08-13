@@ -55,8 +55,7 @@ def font_controller(
         # parameters
         resolution=(800, 600),
         frequency=72,
-        font_size=(12, 16),
-        num_characters=128):
+        font_size=(12, 16)):
     """A hardware block that handles a rom, ram, and vga timer to provide a
     simple interface from a system on an fpga to a vga controlled monitor.
 
@@ -64,7 +63,8 @@ def font_controller(
     Resolution is a tuple of screen width, screen height, and screen
     frequency. Font size is a tuple of font width and font height. """
     
-    # calculate constants like rom and ram depth
+    # calculate constants like rom and ram depth,
+    num_characters = 128
     screen_width, screen_height = resolution
     font_width, font_height = font_size
     chars_per_row = screen_width // font_width
