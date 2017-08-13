@@ -1,19 +1,6 @@
-
-aion/__pycache__/
-
-aion/cores/__pycache__/
-
-aion/cores/hard_cores/__pycache__/
-
-aion/cores/simple_components/__pycache__/
-
-aion/cores/structural_decorators/__pycache__/
-
-aion/cores/vga/__pycache__/
+**/__pycache__/
 
 *.vhd
-
-aion/utils/__pycache__/
 
 aion/**/*.ucf
 !aion/utils/**/*.ucf

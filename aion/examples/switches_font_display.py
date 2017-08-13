@@ -14,16 +14,12 @@ def switches_font_display(clk, vga_ports, resolution, frequency, font_size):
     font_controller handles everything else. """
     screen_width, screen_height = resolution
     font_width, font_height = font_size
-    num_characters = 128
 
-    chars_per_row = screen_width // font_width
-    rows_per_screen = screen_height // font_height
-    ram_depth = chars_per_row * rows_per_screen
-    ram_width = (num_characters - 1).bit_length()
+    ram_depth = screen_width // font_width * screen_height // font_height
     
-    ram_write_port = RamPort(ram_depth, ram_width)
-    font_ctrl = font_controller(clk, vga_ports, ram_write_port,
-                                resolution, frequency, font_size, 128)
+    ram_write_port = RamPort(ram_depth, 7)
+    font_ctrl = font_controller(clk, vga_ports, ram_write_port, resolution,
+                                frequency, font_size, 128)
     
     write_clk = Signal(bool(0))
     div = clk_div(5e3, clk, write_clk)
