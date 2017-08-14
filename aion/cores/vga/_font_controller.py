@@ -100,7 +100,7 @@ def font_controller(
     pixel_sel = Signal(intbv(0, 0, font_width))
     x_ram = Signal(intbv(0, 0, chars_per_row))
     x_counters = counter(clk, [pixel_sel, x_ram], [font_width, chars_per_row],
-                         h_rst, en=Signal(True), num_chains=2)
+                         h_rst, num_chains=2)
     
     y_char_row = Signal(intbv(0, 0, font_height))
     y_ram = Signal(intbv(0, 0, ram_depth))

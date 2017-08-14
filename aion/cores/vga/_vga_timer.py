@@ -50,7 +50,7 @@ def vga_timer(
     
     h = Signal(intbv(0, 0, h_total))
     v = Signal(intbv(0, 0, v_total))
-    counters = counter(clk, [h, v], [h_total, v_total], en=Signal(True),
+    counters = counter(clk, [h, v], [h_total, v_total],
                        pulse_out=[vga_signals.h_refresh, vga_signals.v_refresh],
                        num_chains=2)
     

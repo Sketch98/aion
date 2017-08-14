@@ -143,7 +143,7 @@ def clk_div(divide_by, clk_in, clk_out, duty_cycle_50=False):
             return counter(clk_in, list(factors), pulse_out=clk_out,
                            num_chains=len(factors))
     odd_divs_clk_out = Signal(False)
-    odd_divs = counter(clk_in, max_value=list(factors), en=Signal(True),
+    odd_divs = counter(clk_in, max_value=list(factors),
                        pulse_out=odd_divs_clk_out,
                        num_chains=len(factors))
     
